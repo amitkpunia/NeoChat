@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>{{ title }}</title>
+        <style>
+        
+        #serviceBox
+{
+    width:100%;
+    margin: 0 auto;
+    margin-top:75px;
+    height:250px;
+    border:1px solid black;
+}
+.serviceBox1, .serviceBox2, .serviceBox3, .serviceBox4 {
+    float:left;
+    width:20%;
+    height: 250px;
+    background-color: white;
+    border: 1px solid #bdbdbd;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-box-shadow: 0 0 10px #bdbdbd;
+    -webkit-box-shadow: 0 0 10px #bdbdbd;
+    box-shadow: 0 0 10px #bdbdbd;
+}
+        </style>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script>
+        		function show_message(message){
+						$("#"+message.channel).fadeOut(300,function(){
+							$("#"+message.channel).text(message.value);
+							$("#"+message.channel).fadeIn();
+						});
+						
+				}
+				
+                function open_websocket(){
+
+                    var ws = new WebSocket("ws://127.0.0.1:8888/multi");
+                    ws.onopen = function() {
+                        //show_message('Connected.');
+                        $("#status").text("Connected.");
+                    };
+                    ws.onmessage = function(event) {
+                        console.log(event);
+                        jsonData = JSON.parse(event.data);
+                        show_message(jsonData);
+                    };
+                    ws.onclose = function() {
+                        //show_message("Closed.");
+                        $("#status").text("closed");
+                    };
+                }
+        </script>
+    </head>
+    <body onload="open_websocket()">
+    <h1>{{ title }}</h1>
+    <h3 id="status"></h3>
+ 	<div id="serviceBox"> 
+    		<div class="serviceBox1">
+        	<h2>MARKET</h2>
+        	<p id="MC-MARKET">market</p>
+    	</div>
+     	<div class="serviceBox2">
+        	<h2>STOCK</h2>
+        	<p id="MC-STOCK">stock</p>
+    	</div>
+    	<div class="serviceBox3">
+        	<h2>CRICKET</h2>
+        	<p id="MC-CRICKET">cricket</p>
+     	</div>
+    	<div class="serviceBox4">
+        	<h2>FOOTBALL</h2>
+        	<p id="MC-FOOTBALL">football</p>
+     	</div>
+ 	</div>
+    </body>
+</html>
